@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                                 resName.remove(index);
                                 restaurants.remove(index);
                                 adapter.notifyDataSetChanged();
+                                int size = resName.size();
+                                t1.setText("맛집 리스트("+String.valueOf(size)+"개)");
                             }
                         })
                         .show();
