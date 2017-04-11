@@ -33,18 +33,17 @@ public class Main2Activity extends AppCompatActivity {
         rb1 = (RadioButton) findViewById(R.id.radio1);
         rb2 = (RadioButton) findViewById(R.id.radio2);
         rb3 = (RadioButton) findViewById(R.id.radio3);
-
-        if (rb1.isChecked()) {
-            category = 1;
-        } else if (rb2.isChecked()) {
-            category = 2;
-        } else {
-            category = 3;
-        }
     }
 
     public void onClick(View v) {
         if (v.getId() == R.id.btnAdd) {
+            if (rb1.isChecked()) {
+                category = 1;
+            } else if (rb2.isChecked()) {
+                category = 2;
+            } else {
+                category = 3;
+            }
             Restaurants rs = new Restaurants(et1.getText().toString(), category, et2.getText().toString(),
                     et3.getText().toString(), et4.getText().toString(), et5.getText().toString(), et6.getText().toString());
             Intent intent = getIntent();
