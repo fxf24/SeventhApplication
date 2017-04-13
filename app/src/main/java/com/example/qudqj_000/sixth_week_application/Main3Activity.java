@@ -42,17 +42,7 @@ public class Main3Activity extends AppCompatActivity {
         t6.setText(rs.getHomepage());
         t7.setText(date);
 
-        if(rs.getCategory() == 1){
-            iv1.setImageResource(R.drawable.chicken);
-        }
-        else if(rs.getCategory() == 2){
-            iv1.setImageResource(R.drawable.pizza);
-        }
-        else{
-            iv1.setImageResource(R.drawable.spaghetti);
-        }
-
-
+        iv1.setImageResource(rs.getCategory());
     }
 
     public void onClick(View v){

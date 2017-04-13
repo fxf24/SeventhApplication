@@ -38,11 +38,11 @@ public class Main2Activity extends AppCompatActivity {
     public void onClick(View v) {
         if (v.getId() == R.id.btnAdd) {
             if (rb1.isChecked()) {
-                category = 1;
+                category = R.drawable.chicken;
             } else if (rb2.isChecked()) {
-                category = 2;
+                category = R.drawable.pizza;
             } else {
-                category = 3;
+                category = R.drawable.spaghetti;
             }
             Restaurants rs = new Restaurants(et1.getText().toString(), category, et2.getText().toString(),
                     et3.getText().toString(), et4.getText().toString(), et5.getText().toString(), et6.getText().toString());

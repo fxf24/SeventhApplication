@@ -102,13 +102,4 @@ public class Restaurants implements Parcelable {
         return menu3;
     }
 
-    void setRestaurants(String name, int category, String phoneNum, String homepage, String menu1, String menu2, String menu3){
-        this.name = name;
-        this.category = category;
-        this.phoneNum = phoneNum;
-        this.homepage = homepage;
-        this.menu1 = menu1;
-        this.menu2 = menu2;
-        this.menu3 = menu3;
-    }
 }
