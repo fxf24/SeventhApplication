@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -26,7 +25,6 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
     private Context context;
     private ArrayList<Restaurants> listDatas = new ArrayList<>();
     private ArrayList<Restaurants> filteredItemList = new ArrayList<>();
-    private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
     Filter listFilter;
 
     public NewListAdapter(Context context, ArrayList<Restaurants> listDatas) {
@@ -60,6 +58,11 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
         TextView t2 = (TextView) convertView.findViewById(R.id.phone_num);
         ImageView i1 = (ImageView) convertView.findViewById(R.id.img);
         CheckBox c1 = (CheckBox)convertView.findViewById(R.id.checkbox1);
+
+        Restaurants checkbox = filteredItemList.get(position);
+        checkbox.setCheckBox(c1);
+        filteredItemList.set(position, checkbox);
+        listDatas.set(position, checkbox);
 
         t1.setText(filteredItemList.get(position).getName());
         t2.setText(filteredItemList.get(position).getPhoneNum());
@@ -96,22 +99,37 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
         this.notifyDataSetChanged();
     }
 
-    public void setCheckBox() {
-
-    }
-
-    public int goneCheckBox(int index) {
-        if (checkBoxes.get(index).isChecked()) {
-            checkBoxes.remove(index);
-            return index;
-        } else {
-            checkBoxes.get(index).setVisibility(View.GONE);
-            return -1;
+    public void showCheckBox(){
+        for(int i = 0; i<filteredItemList.size();i++ ){
+            filteredItemList.get(i).getCheckBox().setVisibility(View.VISIBLE);
         }
+        this.notifyDataSetChanged();
     }
 
-    public int getSize() {
-        return checkBoxes.size();
+    public void deleteData(){
+        for(int i = filteredItemList.size()-1; i>=0; i--){
+            final int index = i;
+            if(filteredItemList.get(i).getCheckBox().isChecked()){
+                AlertDialog.Builder dlg = new AlertDialog.Builder(context);
+                dlg.setTitle("삭제확인")
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setMessage("선택한 맛집을 정말 삭제할거에요?")
+                        .setNegativeButton("취소", null)
+                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                filteredItemList.get(index).getCheckBox().setChecked(false);
+                                filteredItemList.get(index).getCheckBox().setVisibility(View.GONE);
+                                filteredItemList.remove(index);
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .show();
+            }
+            else {
+                filteredItemList.get(i).getCheckBox().setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

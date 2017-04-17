@@ -107,43 +107,11 @@ public class MainActivity extends AppCompatActivity {
         else if (v.getId() == R.id.select) {
             if (b1.getText().toString().equals("선택")) {
                 b1.setText("삭제");
-                adapter.setCheckBox();
+                adapter.showCheckBox();
             }
             else {
                 b1.setText("선택");
-                int size = adapter.getSize();
-                Toast.makeText(MainActivity.this,String.valueOf(size),Toast.LENGTH_SHORT).show();
-                listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        final int index = position;
-
-                        AlertDialog.Builder dlg = new AlertDialog.Builder(parent.getContext());
-                        dlg.setTitle("삭제확인")
-                                .setIcon(R.mipmap.ic_launcher)
-                                .setMessage("선택한 맛집을 정말 삭제할거에요?")
-                                .setNegativeButton("취소", null)
-                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        restaurants.remove(index);
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                })
-                                .show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-                for(int i= restaurants.size()-1; i>=0; i--) {
-                    if (adapter.goneCheckBox(i) != -1) {
-                        restaurants.remove(i);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
+                adapter.deleteData();
             }
         }
     }

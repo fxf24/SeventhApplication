@@ -2,6 +2,7 @@ package com.example.qudqj_000.sixth_week_application;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.CheckBox;
 
 /**
  * Created by qudqj_000 on 2017-04-06.
@@ -21,6 +22,7 @@ public class Restaurants implements Parcelable {
     private String menu1;
     private String menu2;
     private String menu3;
+    private CheckBox checkBox;
 
     public Restaurants(){}
 
@@ -102,4 +104,11 @@ public class Restaurants implements Parcelable {
         return menu3;
     }
 
+    public CheckBox getCheckBox() {
+        return checkBox;
+    }
+
+    public void setCheckBox(CheckBox checkBox) {
+        this.checkBox = checkBox;
+    }
 }
