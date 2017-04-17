@@ -109,8 +109,12 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 b1.setText("선택");
-                adapter.delete();
-                adapter.goneCheckBox();
+                for(int i= restaurants.size()-1; i>=0; i--) {
+                    if (adapter.goneCheckBox(i) != -1) {
+                        restaurants.remove(i);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
             }
         }
     }

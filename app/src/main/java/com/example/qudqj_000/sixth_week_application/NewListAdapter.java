@@ -20,23 +20,26 @@ import java.util.Comparator;
  */
 
 public class NewListAdapter extends BaseAdapter implements Filterable {
-    Context context;
-    ArrayList<Restaurants> listDatas = new ArrayList<>();
-    ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+    private Context context;
+    private ArrayList<Restaurants> listDatas = new ArrayList<>();
+    private ArrayList<Restaurants> filteredItemList = new ArrayList<>();
+    private ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+    Filter listFilter;
 
     public NewListAdapter(Context context, ArrayList<Restaurants> listDatas) {
         this.context = context;
         this.listDatas = listDatas;
+        this.filteredItemList = listDatas;
     }
 
     @Override
     public int getCount() {
-        return listDatas.size();
+        return filteredItemList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listDatas.get(position);
+        return filteredItemList.get(position);
     }
 
     @Override
@@ -52,12 +55,12 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
         TextView t1 = (TextView) convertView.findViewById(R.id.resName);
         TextView t2 = (TextView) convertView.findViewById(R.id.phone_num);
         ImageView i1 = (ImageView) convertView.findViewById(R.id.img);
-        CheckBox c1 = (CheckBox)convertView.findViewById(R.id.checkbox1);
+        CheckBox c1 = (CheckBox) convertView.findViewById(R.id.checkbox1);
         checkBoxes.add(c1);
 
-        t1.setText(listDatas.get(position).getName());
-        t2.setText(listDatas.get(position).getPhoneNum());
-        i1.setImageResource(listDatas.get(position).getCategory());
+        t1.setText(filteredItemList.get(position).getName());
+        t2.setText(filteredItemList.get(position).getPhoneNum());
+        i1.setImageResource(filteredItemList.get(position).getCategory());
         return convertView;
     }
 
@@ -71,51 +74,82 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
     Comparator<Restaurants> categoryAsc = new Comparator<Restaurants>() {
         @Override
         public int compare(Restaurants o1, Restaurants o2) {
-            if(o1.getCategory()<o2.getCategory())
+            if (o1.getCategory() < o2.getCategory())
                 return -1;
-            else if(o1.getCategory()>o2.getCategory())
+            else if (o1.getCategory() > o2.getCategory())
                 return 1;
             else
                 return 0;
         }
     };
 
-    public void setNameAsc(){
-        Collections.sort(listDatas,nameAsc);
+    public void setNameAsc() {
+        Collections.sort(filteredItemList, nameAsc);
         this.notifyDataSetChanged();
     }
 
-    public void setCategoryAsc(){
-        Collections.sort(listDatas,categoryAsc);
+    public void setCategoryAsc() {
+        Collections.sort(filteredItemList, categoryAsc);
         this.notifyDataSetChanged();
     }
 
-    public void setCheckBox(){
+    public void setCheckBox() {
         int size = checkBoxes.size();
-        for(int i=0; i<size;i++){
+        for (int i = 0; i < size; i++) {
             checkBoxes.get(i).setVisibility(View.VISIBLE);
         }
         this.notifyDataSetChanged();
     }
 
-    public void goneCheckBox(){
-        int size = checkBoxes.size();
-        for(int i=size-1; i>=0;i--){
-            if(checkBoxes.get(i).isChecked()){
-                listDatas.remove(i);
-                this.notifyDataSetChanged();
-            }
-            checkBoxes.get(i).setVisibility(View.GONE);
+    public int goneCheckBox(int index) {
+        if(checkBoxes.get(index).isChecked()){
+            checkBoxes.remove(index);
+            this.notifyDataSetChanged();
+            return index;
         }
-        this.notifyDataSetChanged();
-    }
-
-    public void delete(){
-
+        else{
+            checkBoxes.get(index).setVisibility(View.GONE);
+            return -1;
+        }
     }
 
     @Override
     public Filter getFilter() {
-        return null;
+        if (listFilter == null) {
+            listFilter = new ListFilter();
+        }
+        return listFilter;
+    }
+
+    private class ListFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            if (constraint == null || constraint.length() == 0) {
+                results.values = listDatas;
+                results.count = listDatas.size();
+            }
+            else {
+                ArrayList<Restaurants> itemList = new ArrayList<>();
+                for (Restaurants item : listDatas) {
+                    if (item.getName().toUpperCase().contains(constraint.toString().toUpperCase())) {
+                        itemList.add(item);
+                    }
+                }
+                results.values = itemList;
+                results.count = itemList.size();
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredItemList = (ArrayList<Restaurants>) results.values;
+            if (results.count > 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyDataSetInvalidated();
+            }
+        }
     }
 }
