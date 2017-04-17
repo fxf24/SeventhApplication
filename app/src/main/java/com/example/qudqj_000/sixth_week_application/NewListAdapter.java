@@ -1,10 +1,13 @@
 package com.example.qudqj_000.sixth_week_application;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -49,14 +52,14 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item, null);
         }
         TextView t1 = (TextView) convertView.findViewById(R.id.resName);
         TextView t2 = (TextView) convertView.findViewById(R.id.phone_num);
         ImageView i1 = (ImageView) convertView.findViewById(R.id.img);
-        CheckBox c1 = (CheckBox) convertView.findViewById(R.id.checkbox1);
-        checkBoxes.add(c1);
+        CheckBox c1 = (CheckBox)convertView.findViewById(R.id.checkbox1);
 
         t1.setText(filteredItemList.get(position).getName());
         t2.setText(filteredItemList.get(position).getPhoneNum());
@@ -94,23 +97,21 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
     }
 
     public void setCheckBox() {
-        int size = checkBoxes.size();
-        for (int i = 0; i < size; i++) {
-            checkBoxes.get(i).setVisibility(View.VISIBLE);
-        }
-        this.notifyDataSetChanged();
+
     }
 
     public int goneCheckBox(int index) {
-        if(checkBoxes.get(index).isChecked()){
+        if (checkBoxes.get(index).isChecked()) {
             checkBoxes.remove(index);
-            this.notifyDataSetChanged();
             return index;
-        }
-        else{
+        } else {
             checkBoxes.get(index).setVisibility(View.GONE);
             return -1;
         }
+    }
+
+    public int getSize() {
+        return checkBoxes.size();
     }
 
     @Override
@@ -128,8 +129,7 @@ public class NewListAdapter extends BaseAdapter implements Filterable {
             if (constraint == null || constraint.length() == 0) {
                 results.values = listDatas;
                 results.count = listDatas.size();
-            }
-            else {
+            } else {
                 ArrayList<Restaurants> itemList = new ArrayList<>();
                 for (Restaurants item : listDatas) {
                     if (item.getName().toUpperCase().contains(constraint.toString().toUpperCase())) {
